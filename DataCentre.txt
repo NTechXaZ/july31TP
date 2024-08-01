@@ -1,0 +1,112 @@
+DataCentre
+
+en
+conf t
+hostname DataCentre
+enable secret Windows1
+line console 0
+password Windows1
+logging synchronous
+login
+line vty 0 15
+password Windows1
+logging synchronous
+login
+service password-encryption
+no ip domain-lookup
+clock timezone EST -5
+banner motd #Authorized Access Only!#
+vtp mode transparent
+no logging console
+
+no ip routing
+
+
+#VLANS
+
+vlan 999
+ name Native
+vlan 720
+ name IT
+vlan 990
+ name DataCentre
+vlan 888
+ name Closed
+ 
+
+#VLAN ASSIGN
+
+interface GigabitEthernet1/0
+switchport mode access
+switchport access vlan 990
+no shut
+
+interface GigabitEthernet1/1
+switchport mode access
+switchport access vlan 990
+no shut
+
+interface GigabitEthernet1/2
+switchport mode access
+switchport access vlan 990
+no shut
+
+interface GigabitEthernet1/3
+switchport mode access
+switchport access vlan 720
+no shut
+
+interface GigabitEthernet2/0
+switchport mode access
+switchport access vlan 888
+shutdown
+
+interface GigabitEthernet2/1
+switchport mode access
+switchport access vlan 888
+shutdown
+
+interface GigabitEthernet2/2
+switchport mode access
+switchport access vlan 888
+shutdown
+
+interface GigabitEthernet2/3
+switchport mode access
+switchport access vlan 888
+shutdown
+
+interface Vlan990
+ip address 10.150.0.34 255.255.255.0
+
+
+
+#ETHERCHANNEL CREATE AND TRUNK
+
+int port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 720,990,999
+switchport trunk native vlan 999
+no shut
+
+int range g0/0-1
+channel-group 1 mode desirable
+no shut
+
+
+int port-channel 2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 720,990,999
+switchport trunk native vlan 999
+no shut
+
+int range g0/2-3
+channel-group 2 mode desirable
+no shut
+
+
+
+int range g1/0-3, g2/0-3
+switchport nonegotiate

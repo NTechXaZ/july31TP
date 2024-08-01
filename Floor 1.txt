@@ -1,0 +1,115 @@
+Acc Floor-1 
+
+en
+conf t
+hostname Acc-Floor1
+enable secret Windows1
+line console 0
+password Windows1
+logging synchronous
+login
+line vty 0 15
+password Windows1
+logging synchronous
+login
+service password-encryption
+no ip domain-lookup
+clock timezone EST -5
+banner motd #Authorized Access Only!#
+vtp mode transparent
+no logging console
+
+no ip routing
+
+
+#VLANS
+
+vlan 105
+ name PharmaPlus
+vlan 115
+ name DynaLabs
+vlan 125
+ name Reception
+vlan 135
+ name Security
+vlan 145
+ name Facilities
+vlan 155
+ name Visitor1
+vlan 720
+ name IT
+vlan 999
+ name Native
+vlan 888
+ name Closed
+ 
+
+#vlan assign 
+
+interface GigabitEthernet0/2
+switchport mode access
+switchport access vlan 105
+no shut
+ 
+interface GigabitEthernet0/3
+switchport mode access
+switchport access vlan 115
+no shut
+
+interface GigabitEthernet1/0
+switchport mode access
+switchport access vlan 125
+no shut
+
+interface GigabitEthernet1/1
+switchport mode access
+switchport access vlan 125
+no shut
+
+interface GigabitEthernet1/2
+switchport mode access
+switchport access vlan 135
+no shut
+
+interface GigabitEthernet1/3
+switchport mode access
+switchport access vlan 135
+no shut
+
+interface GigabitEthernet2/0
+switchport mode access
+switchport access vlan 145
+no shut
+
+interface GigabitEthernet2/1
+switchport mode access
+switchport access vlan 155
+no shut
+
+interface GigabitEthernet2/2
+switchport mode access
+switchport access vlan 155
+no shut
+
+interface GigabitEthernet2/3
+switchport mode access
+switchport access vlan 720
+no shut
+
+int vlan 105
+ip add 10.150.8.31 255.255.255.0
+no shut
+
+
+#TRUNKING
+
+int range g0/0-1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 105,115,125,135,145,155,720,999
+switchport trunk native vlan 999
+no shut
+
+int range g0/2-3, g1/0-3, g2/0-3
+switchport nonegotiate
+no shut

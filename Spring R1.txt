@@ -1,0 +1,83 @@
+Spring R1
+
+#BASIC CONFIG 
+
+
+
+
+
+ipv6 routing
+no ip domain-lookup
+ipv6 unicast routing
+
+
+#INTERFACES
+
+int g0/0
+ip add 10.150.127.5 255.255.255.252
+ipv6 address FE80::1 link-local
+ipv6 address 2001:BBFC:88EF:FFFD::1/64
+
+int g0/1
+ip address 10.150.127.9 255.255.255.252
+ipv6 address FE80::1 link-local
+ipv6 address 2001:BBFC:88EF:FFFE::1/64
+
+int g0/2
+ip address 10.150.127.1 255.255.255.252
+ipv6 address FE80::1 link-local
+ipv6 address 2001:BBFC:88EF:FFFF::1/64
+
+int g0/3
+ip add dhcp
+
+
+#OSPF
+
+router ospf 15
+router-id 1.1.1.1
+priority 120
+auto-cost reference-bandwidth 1000
+passive-interface g0/3
+default-information originate
+
+router ospfv3 15
+router-id 1.1.1.1
+
+int g0/0
+ip ospf  15 area 0
+ip ospf network point-to-point 
+ipv6 ospf 15 area 0
+
+int g0/1
+ip ospf  15 area 0
+ip ospf network point-to-point 
+ipv6 ospf 15 area 0
+
+int g0/2
+ip ospf  15 area 0
+ip ospf network point-to-point    (this is not done in config but use it to try)
+ipv6 ospf 15 area 0
+
+
+#NAT
+{try different things}
+
+access-list 1 permit 10.150.0.0 0.0.0.255      (change this wildcard mask)
+
+ip nat inside source list 1 interface GigabitEthernet0/3 overload
+
+
+int g0/0
+ip nat inside 
+
+int g0/1
+ip nat inside
+
+int g0/2
+ip nat inside
+
+int g0/3
+ip nat outside
+
+
