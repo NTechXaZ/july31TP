@@ -62,18 +62,21 @@ vlan 999
 
 int g1/1
 no shut
+no switchport
 ip address 10.150.127.22 255.255.255.252
 ipv6 address FE80::4 link-local
 ipv6 address 2001:BBFC:88EF:FFFC::2/64
 
 int g1/2
 no shut
+no switchport
 ip address 10.150.127.10 255.255.255.252
 ipv6 address FE80::4 link-local
 ipv6 address 2001:BBFC:88EF:FFFE::2/64
 
 int g1/3
 no shut
+no switchport
 ip address 10.150.127.18 255.255.255.252
 ipv6 address FE80::4 link-local
 ipv6 address 2001:BBFC:88EF:FFFA::2/64
