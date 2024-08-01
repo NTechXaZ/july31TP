@@ -1,0 +1,127 @@
+SpringCore 1 
+
+#BASIC CONFIG
+
+en
+conf t
+hostname Acc-Floor1
+enable secret Windows1
+line console 0
+password Windows1
+logging synchronous
+login
+line vty 0 15
+password Windows1
+logging synchronous
+login
+service password-encryption
+no ip domain-lookup
+clock timezone EST -5
+banner motd #Authorized Access Only!#
+vtp mode transparent
+no logging console
+
+
+
+ip routing
+ipv6 unicast-routing
+ipv6 routing
+
+
+
+#VLANS
+
+vlan 105
+ name PharmaPlus
+vlan 115
+ name DynaLabs
+vlan 125
+ name Reception
+vlan 135
+ name Security
+vlan 145
+ name Facilities
+vlan 155
+ name Visitor1
+vlan 200
+ name Physicians
+vlan 205
+ name ChildrensHealth
+vlan 210
+ name CoolidgeLab
+vlan 215
+ name MassageSpa
+vlan 220
+ name Visitor2
+vlan 305
+ name Allergist
+vlan 310
+ name Physiotherapy
+vlan 315
+ name DentalOffice
+vlan 320
+ name ENT
+vlan 325
+ name Visitor3
+vlan 720
+ name IT
+vlan 888
+ name Closed
+vlan 990
+ name DataCentre
+vlan 999
+ name Native
+ 
+
+
+#POINT TO POINT NETWORK 
+
+int g1/1
+no shut
+ip address 10.150.127.21 255.255.255.252
+ipv6 address FE80::3 link-local
+ipv6 address 2001:BBFC:88EF:FFFC::1/64
+
+
+int g1/2
+no shut
+ip address 10.150.127.14 255.255.255.252
+ipv6 address FE80::3 link-local
+ipv6 address 2001:BBFC:88EF:FFFB::1/64
+
+int g1/3
+no shut
+ip address 10.150.127.6 255.255.255.252
+ipv6 address FE80::3 link-local
+ipv6 address 2001:BBFC:88EF:FFFD::2/64
+
+
+#OSPF 
+router ospf 15
+router-id 3.3.3.3
+auto-cost reference-bandwidth 1000
+passive-interface GigabitEthernet0/0
+passive-interface GigabitEthernet0/1
+passive-interface GigabitEthernet0/2
+passive-interface GigabitEthernet0/3
+passive-interface GigabitEthernet1/0
+passive-interface Vlan105
+passive-interface Vlan115
+passive-interface Vlan125
+passive-interface Vlan135
+passive-interface Vlan145
+passive-interface Vlan155
+passive-interface Vlan200
+passive-interface Vlan205
+passive-interface Vlan215
+passive-interface Vlan220
+passive-interface Vlan305
+passive-interface Vlan310
+passive-interface Vlan315
+passive-interface Vlan320
+passive-interface Vlan325
+passive-interface Vlan720
+passive-interface Vlan888
+passive-interface Vlan990
+passive-interface Vlan999
+
